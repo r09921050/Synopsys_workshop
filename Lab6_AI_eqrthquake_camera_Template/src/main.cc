@@ -100,7 +100,7 @@ int main(int argc, char* argv[])
 		{
 			accel_y.symbol = '+';
 		}
-        fy = int_buf;
+        y = int_buf;
 		accel_y.int_part = int_buf / accel_scale;
 		accel_y.frac_part = int_buf % accel_scale;
 
@@ -119,10 +119,10 @@ int main(int argc, char* argv[])
 		accel_z.frac_part = int_buf % accel_scale;
 
         int_buf = gravity_g * accel_scale;
-        uint32_t gravity_g_int = gravity_g / accel_scale;
-        float gravity_g_frac  = gravity_g % accel_scale;
+        uint32_t gravity_g_int = int_buf / accel_scale;
+        uint32_t gravity_g_frac  = int_buf % accel_scale;
 
-		sprintf(string_buf, "X:%c%1d.%1d | Y:%c%1d.%1d | Z:%c%1d.%1d | S:%2d.%1d\n", 
+		sprintf(string_buf, "X:%c%1ld.%1ld | Y:%c%1ld.%1ld | Z:%c%1ld.%1ld | S:%2ld.%1ld\n", 
 				accel_x.symbol, accel_x.int_part, accel_x.frac_part, 
 				accel_y.symbol, accel_y.int_part, accel_y.frac_part, 
 				accel_z.symbol, accel_z.int_part, accel_z.frac_part,

@@ -24,8 +24,10 @@ void RespondToDetection(tflite::ErrorReporter* error_reporter,
                         int8_t person_score, int8_t no_person_score) {
   if (person_score > no_person_score) {
     hx_drv_led_on(HX_DRV_LED_GREEN);
+    hx_drv_led_off(HX_DRV_LED_RED);
   } else {
     hx_drv_led_off(HX_DRV_LED_GREEN);
+    hx_drv_led_on(HX_DRV_LED_RED);
   }
 
   TF_LITE_REPORT_ERROR(error_reporter, "person score:%d no person score %d",

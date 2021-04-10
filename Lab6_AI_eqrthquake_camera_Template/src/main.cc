@@ -72,7 +72,6 @@ int main(int argc, char* argv[])
 		{
 			accel_x.symbol = '+';
 		}
-        ;
 		accel_x.int_part = int_buf / accel_scale;
 		accel_x.frac_part = int_buf % accel_scale;
 
@@ -115,6 +114,10 @@ int main(int argc, char* argv[])
 				accel_z.symbol, accel_z.int_part, accel_z.frac_part,
                 gravity_g_int, gravity_g_frac);
 		hx_drv_uart_print(string_buf);
+
+		//led toggle function 0.1s
+		led_toggle(msec_x100);
+
         msec_x100 = msec_x100 + 1;
         delay_ms(100);
         msec_cnt = msec_cnt + 100;
@@ -132,3 +135,15 @@ volatile void delay_ms(uint32_t ms_input)
     for(i = 0; i < ms_input; i++)
         for(j = 0; j < 40000; j++);
 }
+
+ volatile void led_toggle(uint32_t 100msec_cnt){
+    switch(100msec_cnt % 2)
+    {
+      case 0:
+        hal_gpio_set(&hal_led_g, GPIO_PIN_SET);
+        break;    
+      case 1:
+        hal_gpio_set(&hal_led_g, GPIO_PIN_RESET);
+        break;
+    }
+ }

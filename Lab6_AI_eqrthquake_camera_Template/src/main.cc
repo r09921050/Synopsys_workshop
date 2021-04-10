@@ -124,6 +124,9 @@ int main(int argc, char* argv[])
 
         msec_x100 = msec_x100 + 5;
         delay_ms(500);
+        msec_cnt = msec_cnt + 125;
+		sec_cnt = sec_cnt + (msec_cnt / 1000);
+		msec_cnt = msec_cnt % 1000;
     }
 }
 

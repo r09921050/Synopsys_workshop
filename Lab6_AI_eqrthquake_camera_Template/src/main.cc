@@ -105,7 +105,7 @@ int main(int argc, char* argv[])
 		accel_z.frac_part = int_buf % accel_scale;
 
         int_buf = gravity_g * accel_scale;
-        int gravity_g_int = gravity_g / accel_scale;
+        uint32_t gravity_g_int = gravity_g / accel_scale;
         float gravity_g_frac  = gravity_g % accel_scale;
 
 		sprintf(string_buf, "X:%c%1d.%1d | Y:%c%1d.%1d | Z:%c%1d.%1d | S:%2d.%1d\n", 

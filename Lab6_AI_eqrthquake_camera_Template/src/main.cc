@@ -115,9 +115,9 @@ int main(int argc, char* argv[])
 				accel_z.symbol, accel_z.int_part, accel_z.frac_part,
                 gravity_g_int, gravity_g_frac);
 		hx_drv_uart_print(string_buf);
-        msec_x100 = msec_x100 + 5;
-        delay_ms(500);
-        msec_cnt = msec_cnt + 125;
+        msec_x100 = msec_x100 + 1;
+        delay_ms(100);
+        msec_cnt = msec_cnt + 100;
         sec_cnt = sec_cnt + (msec_cnt / 1000);
         msec_cnt = msec_cnt % 1000;
     }

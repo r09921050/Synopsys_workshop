@@ -30,7 +30,6 @@ hx_drv_gpio_config_t hal_led_g;
 
 
 volatile void delay_ms(uint32_t ms_input);
-void GPIO_INIT(void);
 volatile void led_toggle(uint32_t hunmsec_cnt);
 
 char string_buf[100] = "test\n";
@@ -50,6 +49,7 @@ typedef struct
 // this main.cc file in a target-specific subfolder.
 int main(int argc, char* argv[]) 
 {
+
     uint32_t msec_x100 = 0;
     int32_t int_buf;
 	accel_type accel_x, accel_y, accel_z;
@@ -60,7 +60,6 @@ int main(int argc, char* argv[])
 	if (hx_drv_accelerometer_initial() != HX_DRV_LIB_PASS)
 		hx_drv_uart_print("Accelerometer Initialize Fail\n");
     setup();
-
     //3.1.1 print T03
     hx_drv_uart_print("T03\n\n");
     while (true) 
@@ -163,16 +162,3 @@ volatile void led_toggle(uint32_t hunmsec_cnt){
  }
 
  
-void GPIO_INIT(void)
-{
-  
-  if(hal_gpio_init(&hal_led_r, HX_DRV_LED_RED, HX_DRV_GPIO_OUTPUT, GPIO_PIN_RESET) == HAL_OK)
-    hx_drv_uart_print("GPIO_LED_RED Initialized: OK\n");
-  else
-    hx_drv_uart_print("GPIO_LED_RED Initialized: Error\n");
-
-  if(hal_gpio_init(&hal_led_g, HX_DRV_LED_GREEN, HX_DRV_GPIO_OUTPUT, GPIO_PIN_RESET) == HAL_OK)
-    hx_drv_uart_print("GPIO_LED_GREEN Initialized: OK\n");
-  else
-    hx_drv_uart_print("GPIO_LED_GREEN Initialized: Error\n");
-}

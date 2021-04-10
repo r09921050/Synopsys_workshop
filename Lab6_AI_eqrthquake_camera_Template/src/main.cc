@@ -43,33 +43,25 @@ int main(int argc, char* argv[])
 	uint32_t sec_cnt = 0;
 
     hx_drv_uart_initial(UART_BR_115200);
-    hx_drv_uart_print("Testing\n");
 	if (hx_drv_accelerometer_initial() != HX_DRV_LIB_PASS)
 		hx_drv_uart_print("Accelerometer Initialize Fail\n");
-	else
-		hx_drv_uart_print("Accelerometer Initialize Success\n");
-
     setup();
 
     //3.1.1 print T03
     hx_drv_uart_print("T03\n\n");
     while (true) 
     {
-        hx_drv_uart_print("Start time count: %5d.%1d\n", msec_x100 / 10, msec_x100 % 10);
-        hx_drv_uart_print("Detecting\n");
         loop();
-
-        hx_drv_uart_print("Testing: %d.%d sec\n", sec_cnt, msec_cnt / 100);
-
 		uint32_t available_count = 0;
 		float x, y, z;
-		available_count = hx_drv_accelerometer_available_count();				
-		hx_drv_uart_print("Accel get FIFO: %d\n", available_count);
+        float gravity_g=0;
+		available_count = hx_drv_accelerometer_available_count();		
 		for (int i = 0; i < available_count; i++) 
 		{
 			hx_drv_accelerometer_receive(&x, &y, &z);
 		}
 
+        gravity_g = x*x + y*y + z*z;
 		int_buf = x * accel_scale; //scale value
 		if(int_buf < 0)
 		{
@@ -80,6 +72,7 @@ int main(int argc, char* argv[])
 		{
 			accel_x.symbol = '+';
 		}
+        ;
 		accel_x.int_part = int_buf / accel_scale;
 		accel_x.frac_part = int_buf % accel_scale;
 
@@ -94,6 +87,7 @@ int main(int argc, char* argv[])
 		{
 			accel_y.symbol = '+';
 		}
+        fy = int_buf;
 		accel_y.int_part = int_buf / accel_scale;
 		accel_y.frac_part = int_buf % accel_scale;
 
@@ -111,22 +105,21 @@ int main(int argc, char* argv[])
 		accel_z.int_part = int_buf / accel_scale;
 		accel_z.frac_part = int_buf % accel_scale;
 
+        int_buf = gravity_g * accel_scale;
+        int gravity_g_int = gravity_g / accel_scale;
+        float gravity_g_frac  = gravity_g % accel_scale;
 
-
-		sprintf(string_buf, "%c%1d.%1d | %c%1d.%1d | %c%1d.%1d G\n", 
+		sprintf(string_buf, "X:%c%1d.%1d | Y:%c%1d.%1d | Z:%c%1d.%1d | S:%2d.%1d\n", 
 				accel_x.symbol, accel_x.int_part, accel_x.frac_part, 
 				accel_y.symbol, accel_y.int_part, accel_y.frac_part, 
-				accel_z.symbol, accel_z.int_part, accel_z.frac_part);
+				accel_z.symbol, accel_z.int_part, accel_z.frac_part,
+                gravity_g_int, gravity_g_frac);
 		hx_drv_uart_print(string_buf);
-
-
-		hx_drv_uart_print("\n\n");
-
         msec_x100 = msec_x100 + 5;
         delay_ms(500);
         msec_cnt = msec_cnt + 125;
-		sec_cnt = sec_cnt + (msec_cnt / 1000);
-		msec_cnt = msec_cnt % 1000;
+        sec_cnt = sec_cnt + (msec_cnt / 1000);
+        msec_cnt = msec_cnt % 1000;
     }
 }
 
